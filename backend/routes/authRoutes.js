@@ -14,7 +14,15 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    const user = await User.create({ name, email, password, phone, address });
+    const user = await User.create({ 
+      name, 
+      email, 
+      password, 
+      phone, 
+      address,
+      role: 'super_admin',
+      isVerified: true
+    });
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRE
@@ -119,8 +127,6 @@ router.get('/users', protect, admin, async (req, res) => {
   }
 });
 
-module.exports = router;
-
 // Delete user (admin only)
 router.delete('/users/:id', protect, admin, async (req, res) => {
   try {
@@ -128,7 +134,6 @@ router.delete('/users/:id', protect, admin, async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    // Prevent admin from deleting themselves
     if (user.id === req.user.id) {
       return res.status(400).json({ message: 'You cannot delete your own account' });
     }
@@ -138,3 +143,5 @@ router.delete('/users/:id', protect, admin, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+module.exports = router;
