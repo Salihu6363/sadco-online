@@ -19,9 +19,7 @@ router.post('/register', async (req, res) => {
       email, 
       password, 
       phone, 
-      address,
-      role: 'super_admin',
-      isVerified: true
+      address
     });
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
