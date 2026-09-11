@@ -11,7 +11,15 @@ const sequelize = new Sequelize(
     dialect: 'mysql',
     logging: false,
     dialectOptions: {
-      connectTimeout: 60000
+      ssl: {
+        rejectUnauthorized: false
+      }
+    },
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000
     }
   }
 );
